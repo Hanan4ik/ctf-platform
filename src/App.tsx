@@ -18,6 +18,7 @@ function PopupTask({ task, onClose }) {
     <div className="modal-inner">
       <div className="modal-header">
         <h2>{task.name}</h2>
+        <button className="action-btn" style={{width: '10%', color: '#fff'}} onClick={onClose}>❌</button>
       </div>
       <div className="modal-body">
         <p className="definition">{task.definition}</p>
@@ -25,8 +26,12 @@ function PopupTask({ task, onClose }) {
           <b>Выполнение задания здесь: </b>
           <a href={task.link} target="_blank" rel="noreferrer">{task.link}</a>
         </div>
+        <div className='answer-section'>
+          <input placeholder='Флаг'/>
+          <button className="action-btn" onClick={() => {alert("Типо отправлено, йоу"); onClose()}}>Отправить</button>
+          
+        </div>
       </div>
-      <button className="action-btn" onClick={onClose}>Понятно</button>
     </div>
   );
 }
@@ -39,12 +44,12 @@ function StageDiv({ stageNumber }) {
   // const tasks = fetch(api/give_me_number_1)
 
   const tasksStageOne = [
-    { id: 0, name: "Взлом гугла", definition: "Короче тут очевидный SQL Injection, Быстрее ботайте", link: "https://accounts.google.com" },
-    { id: 1, name: "Взлом телеги", definition: "Короче тут поиграйте с эндпоинтами где-то админ оставил креды", link: "https://telegram.org" },
-    { id: 2, name: "Взлом жопы", definition: "Чекни жопу", link: "https://max.ru" },
-    { id: 3, name: "Взлом гугла", definition: "Короче тут очевидный SQL Injection, Быстрее ботайте", link: "https://accounts.google.com" },
-    { id: 4, name: "Взлом телеги", definition: "Короче тут поиграйте с эндпоинтами где-то админ оставил креды", link: "https://telegram.org" },
-    { id: 5, name: "Взлом жопы", definition: "Чекни жопу", link: "https://max.ru" },
+    { id: 0, name: "Нет блин, приквел", definition: "Короче тут очевидный SQL Injection, Быстрее ботайте", link: "https://accounts.google.com" },
+    { id: 1, name: "Угон тележки в ашане", definition: "Короче тут поиграйте с эндпоинтами где-то админ оставил креды", link: "https://telegram.org" },
+    { id: 2, name: "Так, а это что?", definition: "Тут флага нет, так как его нельзя взломать, даже не пробуйте", link: "https://max.ru" },
+    { id: 3, name: "Взлом Meta*\n*Запрещена в РФ", definition: "", link: "https://accounts.google.com" },
+    { id: 4, name: "А, так тут Cross-Site", definition: "Короче тут поиграйте с эндпоинтами где-то админ оставил креды", link: "https://telegram.org" },
+    { id: 5, name: "Составители, опять SQL-Injection?", definition: "Чекни жопу", link: "https://max.ru" },
   ];
 
   const openModal = (task) => {
