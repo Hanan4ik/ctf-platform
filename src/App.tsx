@@ -1,97 +1,94 @@
 import { useState } from 'react';
-import './App.css'
+import Modal from 'react-modal';
+import './App.css';
 
-function Task({name, onPopup}){
+// Essential for accessibility
+Modal.setAppElement('#root');
+
+function Task({ name, onPopup }) {
   return (
-    <>
-    <button className='task-button' onClick={onPopup}>{name}</button>
-    <br/>
-    </>
-  )
+    <button className='task-button' onClick={onPopup}>
+      {name}
+    </button>
+  );
 }
 
-function PopupTask({definition, link}){
+function PopupTask({ task, onClose }) {
   return (
-    <>
-    <label>
-      {definition}
-      <br/>
-      <br/>
-      <b>Выполнение задания здесь: <a href={link}>{link}</a> </b>
-    </label>
-    </>
-  )
+    <div className="modal-inner">
+      <div className="modal-header">
+        <h2>{task.name}</h2>
+      </div>
+      <div className="modal-body">
+        <p className="definition">{task.definition}</p>
+        <div className="link-section">
+          <b>Выполнение задания здесь: </b>
+          <a href={task.link} target="_blank" rel="noreferrer">{task.link}</a>
+        </div>
+      </div>
+      <button className="action-btn" onClick={onClose}>Понятно</button>
+    </div>
+  );
 }
 
-function StageDiv({stageNumber}){
-  const [clickedTask, setClickedTask] = useState({});
-  const [isViewing, setIViewing] = useState(false);
-  // const tasksStageOne = fetch("api/give_me_stage_one_pidor");
+function StageDiv({ stageNumber }) {
+  const [clickedTask, setClickedTask] = useState(null);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+
+
+  // const tasks = fetch(api/give_me_number_1)
+
   const tasksStageOne = [
-    {
-      id: 0,
-      stage: 1,
-      name: "Взлом гугла",
-      definition: "Короче тут очевидный SQL Injection, Быстрее ботайте",
-      link: "https://accounts.google.com"
-    },
-    {
-      id: 1,
-      stage: 1,
-      name: "Взлом телеги",
-      definition: "Короче тут поиграйте с эндпоинтами где-то админ оставил креды",
-      link: "https://telegram.org"
-    },
-    {
-      id: 2,
-      stage: 1,
-      name: "Взлом жопы",
-      definition: "Чекни жопу",
-      link: "https://max.ru"
-    },
+    { id: 0, name: "Взлом гугла", definition: "Короче тут очевидный SQL Injection, Быстрее ботайте", link: "https://accounts.google.com" },
+    { id: 1, name: "Взлом телеги", definition: "Короче тут поиграйте с эндпоинтами где-то админ оставил креды", link: "https://telegram.org" },
+    { id: 2, name: "Взлом жопы", definition: "Чекни жопу", link: "https://max.ru" },
+    { id: 3, name: "Взлом гугла", definition: "Короче тут очевидный SQL Injection, Быстрее ботайте", link: "https://accounts.google.com" },
+    { id: 4, name: "Взлом телеги", definition: "Короче тут поиграйте с эндпоинтами где-то админ оставил креды", link: "https://telegram.org" },
+    { id: 5, name: "Взлом жопы", definition: "Чекни жопу", link: "https://max.ru" },
   ];
 
+  const openModal = (task) => {
+    setClickedTask(task);
+    setModalIsOpen(true);
+  };
+
   return (
-    <>
-    {isViewing && <span className='test'>Smth</span>}
-    <div className='stage-tasks'>
-      <p className='stage-title'>Задания первого этапа</p>
-      <tr className='tasks'>
-        <td>
-        <Task name={tasksStageOne[0].name} onPopup={() => setClickedTask(tasksStageOne[0])}/>
-        </td>
-        <td>
-        <Task name={tasksStageOne[1].name} onPopup={() => setClickedTask(tasksStageOne[1])}/>
-        </td>
-        <td>
-        <Task name={tasksStageOne[2].name} onPopup={() => setClickedTask(tasksStageOne[2])}/>
-        </td>
-        <td>
-        <Task name={tasksStageOne[0].name} onPopup={() => setClickedTask(tasksStageOne[0])}/>
-        </td>
-        <td>
-        <Task name={tasksStageOne[1].name} onPopup={() => setClickedTask(tasksStageOne[1])}/>
-        </td>
-        <td>
-        <Task name={tasksStageOne[2].name} onPopup={() => setClickedTask(tasksStageOne[2])}/>
-        </td>
-      </tr>
-      <br/>
-      <p className='stage-title'>Условие задачи <span>{clickedTask.name}</span></p>
-      <PopupTask definition={clickedTask.definition} link={clickedTask.link}/>
+    <div className='stage-container'>
+      <p className='stage-title'>Задания {stageNumber} этапа</p>
+      
+      {/* Adaptive grid for task buttons */}
+      <div className='tasks-grid'>
+        {tasksStageOne.map((task, index) => (
+          <Task 
+            key={index} 
+            name={task.name} 
+            onPopup={() => openModal(task)} 
+          />
+        ))}
+      </div>
+
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={() => setModalIsOpen(false)}
+        className="modal-content-box"
+        overlayClassName="modal-overlay-bg"
+      >
+        {clickedTask && (
+          <PopupTask 
+            task={clickedTask} 
+            onClose={() => setModalIsOpen(false)} 
+          />
+        )}
+      </Modal>
     </div>
-    </>
-  )
-
+  );
 }
 
-function App() {
-
+export default function App() {
   return (
-
-    <StageDiv stageNumber={1}/>
-
-  )
+  <>
+  <StageDiv stageNumber={1}/>
+  <StageDiv stageNumber={2}/>
+  </>
+);
 }
-
-export default App
